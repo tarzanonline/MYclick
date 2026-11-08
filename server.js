@@ -5,7 +5,7 @@ const url = require('url');
 
 const PORT = process.env.PORT || 8080;
 const USERS_FILE = './users.json';
-const ADMIN_PASSWORD = "master123";   // Admin panel ka password (change kar lena)
+const ADMIN_PASSWORD = "Chinu@143";   // 
 
 // ================== USERS ==================
 let users = { "admin": "1234" };
