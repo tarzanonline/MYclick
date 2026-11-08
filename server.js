@@ -5,7 +5,7 @@ const url = require('url');
 
 const PORT = process.env.PORT || 8080;
 const USERS_FILE = './users.json';
-const ADMIN_PASSWORD = "master123";
+const ADMIN_PASSWORD = "Chinu143";
 
 // Users database
 let users = { "admin": "1234" };
