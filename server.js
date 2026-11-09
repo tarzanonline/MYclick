@@ -5,7 +5,7 @@ const url = require('url');
 
 const PORT = process.env.PORT || 8080;
 const USERS_FILE = './users.json';
-const ADMIN_PASSWORD = "Chinu143";
+const ADMIN_PASSWORD = "master123";
 
 // Users database
 let users = { "admin": "1234" };
@@ -42,7 +42,7 @@ const server = http.createServer((req, res) => {
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Remote Clicker - Admin</title>
+  <title>MYclick - Admin</title>
   <style>
     * { box-sizing: border-box; }
     body { font-family: 'Segoe UI', Arial; background: #0f0f0f; color: #eee; margin: 0; padding: 40px; }
@@ -57,7 +57,7 @@ const server = http.createServer((req, res) => {
   </style>
 </head>
 <body>
-  <h1>Remote Clicker</h1>
+  <h1>MYclick</h1>
   <p style="color:#888; margin-bottom:30px;">Admin Panel</p>
 
   <div id="loginSection" class="card">
@@ -153,11 +153,15 @@ const server = http.createServer((req, res) => {
     let body = '';
     req.on('data', chunk => body += chunk);
     req.on('end', () => {
-      const data = JSON.parse(body);
-      if (data.admin !== ADMIN_PASSWORD) return res.end(JSON.stringify({ error: "Wrong admin password" }));
-      users[data.username] = data.password;
-      saveUsers();
-      res.end(JSON.stringify({ users }));
+      try {
+        const data = JSON.parse(body);
+        if (data.admin !== ADMIN_PASSWORD) return res.end(JSON.stringify({ error: "Wrong admin password" }));
+        users[data.username] = data.password;
+        saveUsers();
+        res.end(JSON.stringify({ users }));
+      } catch (e) {
+        res.end(JSON.stringify({ error: "Invalid data" }));
+      }
     });
     return;
   }
@@ -166,11 +170,15 @@ const server = http.createServer((req, res) => {
     let body = '';
     req.on('data', chunk => body += chunk);
     req.on('end', () => {
-      const data = JSON.parse(body);
-      if (data.admin !== ADMIN_PASSWORD) return res.end(JSON.stringify({ error: "Wrong admin password" }));
-      delete users[data.username];
-      saveUsers();
-      res.end(JSON.stringify({ users }));
+      try {
+        const data = JSON.parse(body);
+        if (data.admin !== ADMIN_PASSWORD) return res.end(JSON.stringify({ error: "Wrong admin password" }));
+        delete users[data.username];
+        saveUsers();
+        res.end(JSON.stringify({ users }));
+      } catch (e) {
+        res.end(JSON.stringify({ error: "Invalid data" }));
+      }
     });
     return;
   }
@@ -182,9 +190,10 @@ const server = http.createServer((req, res) => {
 // ================== WEBSOCKET ==================
 const wss = new WebSocket.Server({ server });
 
-wss.on('connection', (ws) => {
+wss.on('connection', (ws, req) => {
   let currentUser = null;
   let currentRole = null;
+  const clientIP = req.socket.remoteAddress || "unknown";
 
   ws.on('message', (msg) => {
     try {
@@ -198,7 +207,6 @@ wss.on('connection', (ws) => {
           currentRole = role || 'phone';
 
           if (currentRole === 'windows') {
-            // Purana connection hata do agar same user ka pehle se hai
             if (windowsClients[username]) {
               try { windowsClients[username].close(); } catch(e) {}
             }
@@ -214,24 +222,20 @@ wss.on('connection', (ws) => {
         return;
       }
 
-     // CLICK (sirf phone se aayega)
-if (data.type === 'click' && currentUser && currentRole === 'phone') {
-  const target = windowsClients[currentUser];
-  if (target && target.readyState === WebSocket.OPEN) {
-    // Phone ka IP nikaalo
-    const phoneIP = ws._socket?.remoteAddress || "unknown";
-    
-    target.send(JSON.stringify({
-      type: 'click',
-      side: data.side,
-      ip: phoneIP
-    }));
-    console.log(`Click ${data.side} from ${currentUser} (IP: ${phoneIP})`);
-  } else {
-    console.log(`No Windows client for user: ${currentUser}`);
-  }
-  return;
-}
+      // CLICK (phone se)
+      if (data.type === 'click' && currentUser && currentRole === 'phone') {
+        const target = windowsClients[currentUser];
+        if (target && target.readyState === WebSocket.OPEN) {
+          target.send(JSON.stringify({
+            type: 'click',
+            side: data.side,
+            ip: clientIP
+          }));
+          console.log(`Click ${data.side} from ${currentUser} (IP: ${clientIP})`);
+        } else {
+          console.log(`No Windows client for user: ${currentUser}`);
+        }
+        return;
       }
 
     } catch (e) {
