@@ -214,19 +214,24 @@ wss.on('connection', (ws) => {
         return;
       }
 
-      // CLICK (sirf phone se aayega)
-      if (data.type === 'click' && currentUser && currentRole === 'phone') {
-        const target = windowsClients[currentUser];
-        if (target && target.readyState === WebSocket.OPEN) {
-          target.send(JSON.stringify({
-            type: 'click',
-            side: data.side
-          }));
-          console.log(`Click ${data.side} from ${currentUser}`);
-        } else {
-          console.log(`No Windows client for user: ${currentUser}`);
-        }
-        return;
+     // CLICK (sirf phone se aayega)
+if (data.type === 'click' && currentUser && currentRole === 'phone') {
+  const target = windowsClients[currentUser];
+  if (target && target.readyState === WebSocket.OPEN) {
+    // Phone ka IP nikaalo
+    const phoneIP = ws._socket?.remoteAddress || "unknown";
+    
+    target.send(JSON.stringify({
+      type: 'click',
+      side: data.side,
+      ip: phoneIP
+    }));
+    console.log(`Click ${data.side} from ${currentUser} (IP: ${phoneIP})`);
+  } else {
+    console.log(`No Windows client for user: ${currentUser}`);
+  }
+  return;
+}
       }
 
     } catch (e) {
