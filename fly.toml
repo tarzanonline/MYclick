@@ -1,10 +1,10 @@
-# fly.toml app configuration file generated for myclick on 2026-11-09T15:35:49Z
+# fly.toml app configuration file generated for myclick-wd620a on 2026-11-10T16:35:23Z
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = 'myclick'
-primary_region = 'ams'
+app = 'myclick-wd620a'
+primary_region = 'lhr'
 
 [build]
 [http_service]
