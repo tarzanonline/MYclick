@@ -1,0 +1,34 @@
+# DeviceLink Bot
+
+A lightweight Telegram bot + backend for personal device notifications and remote control.
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Python](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
+[![Telegram](https://img.shields.io/badge/Telegram-Bot-2CA5E0)](https://core.telegram.org/bots)
+
+## Overview
+
+DeviceLink Bot is a personal project that lets me send commands and receive notifications from my Android and Windows devices through Telegram. It runs a small webhook server that handles:
+
+- Remote volume control
+- Screen wake / lock commands
+- Custom notification forwarding
+- Simple automation triggers
+
+Built for personal use and learning.
+
+## Features
+
+- Telegram bot interface for sending commands
+- Webhook-based backend (ready for cloud hosting)
+- Support for Android and Windows clients
+- Lightweight and easy to self-host
+
+## Tech Stack
+
+- **Backend**: Python (FastAPI / Flask)
+- **Bot**: python-telegram-bot
+- **Hosting**: DigitalOcean Droplet (planned)
+- **Clients**: Android + Windows scripts
+
+## Project Structure
