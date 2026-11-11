@@ -1,10 +1,10 @@
-# fly.toml app configuration file generated for myclick-f-cirg on 2026-11-11T05:27:58Z
+# fly.toml app configuration file generated for myclick on 2026-11-11T07:19:11Z
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = 'myclick-f-cirg'
-primary_region = 'lhr'
+app = 'myclick'
+primary_region = 'fra'
 
 [build]
 [http_service]
